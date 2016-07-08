@@ -21,9 +21,8 @@ public abstract class Tank {
         return timeToTurn;
     }
 
-    public int createDamage(int damage) {
+    public void createDamage(int damage) {
         health = health - damage;
-        return health;
     }
 
     abstract int getArmor();
