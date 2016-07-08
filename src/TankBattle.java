@@ -41,16 +41,16 @@ public class TankBattle {
                 curGermanTankDislocation * curGermanTank.getTimeToTurn();
             //если танк СССР быстрее развернулся то он успевает нанести бонусные выстрелы
             if (numTacts < 0){
-                curGermanTank.setHealth((int)(-numTacts/curUssrTank.getTimeToReload() + 1)
+                curGermanTank.createDamage((int)(-numTacts/curUssrTank.getTimeToReload() + 1)
                         * (curUssrTank.getDamage() - curGermanTank.getArmor()));
                 while (true) {
-                    curUssrTank.setHealth(curGermanTank.getDamage() - curUssrTank.getArmor());
+                    curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
                     if (curUssrTank.getHealth() < 0){
                         ussrTanks.remove(rUssr);
                         System.out.println(curUssrTank.getName() + " - уничтожен");
                         break;
                     }
-                    curGermanTank.setHealth(curUssrTank.getDamage() - curGermanTank.getArmor());
+                    curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
                     if (curGermanTank.getHealth() < 0) {
                         germanTanks.remove(rGerman);
                         System.out.println(curGermanTank.getName() + " - уничтожен");
@@ -60,16 +60,16 @@ public class TankBattle {
             }
             //и наоборот
             else if(numTacts > 0){
-                curUssrTank.setHealth((int)(numTacts/curGermanTank.getTimeToReload() + 1) *
+                curUssrTank.createDamage((int)(numTacts/curGermanTank.getTimeToReload() + 1) *
                         (curGermanTank.getDamage() - curUssrTank.getArmor()));
                 while (true) {
-                    curGermanTank.setHealth(curUssrTank.getDamage() - curGermanTank.getArmor());
+                    curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
                     if (curGermanTank.getHealth() < 0) {
                         germanTanks.remove(rGerman);
                         System.out.println(curGermanTank.getName() + " - уничтожен");
                         break;
                     }
-                    curUssrTank.setHealth(curGermanTank.getDamage() - curUssrTank.getArmor());
+                    curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
                     if (curUssrTank.getHealth() < 0) {
                         ussrTanks.remove(rUssr);
                         System.out.println(curUssrTank.getName() + " - уничтожен");
@@ -80,13 +80,13 @@ public class TankBattle {
             else if(numTacts == 0){
                 if (r.nextInt(1) == 0) {
                     while (true) {
-                        curGermanTank.setHealth(curUssrTank.getDamage() - curGermanTank.getArmor());
+                        curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
                         if (curGermanTank.getHealth() < 0) {
                             germanTanks.remove(rGerman);
                             System.out.println(curGermanTank.getName() + " - уничтожен");
                             break;
                         }
-                        curUssrTank.setHealth(curGermanTank.getDamage() - curUssrTank.getArmor());
+                        curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
                         if (curUssrTank.getHealth() < 0) {
                             ussrTanks.remove(rUssr);
                             System.out.println(curUssrTank.getName() + " - уничтожен");
@@ -96,13 +96,13 @@ public class TankBattle {
                 }
                 else {
                     while (true) {
-                        curUssrTank.setHealth(curGermanTank.getDamage() - curUssrTank.getArmor());
+                        curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
                         if (curUssrTank.getHealth() < 0){
                             ussrTanks.remove(rUssr);
                             System.out.println(curUssrTank.getName() + " - уничтожен");
                             break;
                         }
-                        curGermanTank.setHealth(curUssrTank.getDamage() - curGermanTank.getArmor());
+                        curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
                         if (curGermanTank.getHealth() < 0) {
                             germanTanks.remove(rGerman);
                             System.out.println(curGermanTank.getName() + " - уничтожен");
