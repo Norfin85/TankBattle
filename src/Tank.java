@@ -2,7 +2,7 @@
  * Created by User on 05.07.2016.
  */
 public abstract class Tank {
-    private int health, damage, dislocation, actionPoints;
+    private int health, damage;
     private double timeToReload, timeToTurn;
 
     public int getHealth() {
