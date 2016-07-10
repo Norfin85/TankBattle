@@ -1,3 +1,9 @@
+package App;
+
+import App.Tanks.FactoryProducer;
+import App.Tanks.Tank;
+import App.Tanks.TankFactory;
+
 import java.util.ArrayList;
 import java.util.Random;
 

@@ -1,7 +1,12 @@
+package App.Tanks.German;
+
+import App.Tanks.Tank;
+import App.Tanks.TankFactory;
+
 /**
  * Created by User on 05.07.2016.
  */
-public class GermanTankFactory implements TankFactory{
+public class GermanTankFactory implements TankFactory {
     @Override
     public Tank createGermanTank(String typeTank) {
         Tank germanTank = null;

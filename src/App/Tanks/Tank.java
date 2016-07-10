@@ -1,3 +1,5 @@
+package App.Tanks;
+
 /**
  * Created by User on 05.07.2016.
  */
@@ -25,9 +27,9 @@ public abstract class Tank {
         health = health - damage;
     }
 
-    abstract int getArmor();
+    public abstract int getArmor();
 
-    abstract String getName();
+    public abstract String getName();
 
     public Tank(int health, int damage, double timeToReload, double timeToTurn) {
         this.health = health;

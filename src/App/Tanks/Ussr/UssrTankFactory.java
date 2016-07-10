@@ -1,3 +1,8 @@
+package App.Tanks.Ussr;
+
+import App.Tanks.Tank;
+import App.Tanks.TankFactory;
+
 /**
  * Created by User on 05.07.2016.
  */

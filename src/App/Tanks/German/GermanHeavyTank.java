@@ -1,3 +1,7 @@
+package App.Tanks.German;
+
+import App.Tanks.Tank;
+
 /**
  * Created by User on 06.07.2016.
  */
@@ -14,7 +18,7 @@ public class GermanHeavyTank extends Tank {
     }
 
     @Override
-    String getName() {
+    public String getName() {
         return "GERMAN_HEAVY";
     }
 }

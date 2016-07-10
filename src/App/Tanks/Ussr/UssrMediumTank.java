@@ -1,7 +1,11 @@
+package App.Tanks.Ussr;
+
+import App.Tanks.Tank;
+
 /**
  * Created by User on 05.07.2016.
  */
-public class UssrMediumTank extends Tank{
+public class UssrMediumTank extends Tank {
         private int armor;
         public UssrMediumTank(){
             super(200, 60, 30., 40.);
@@ -13,7 +17,7 @@ public class UssrMediumTank extends Tank{
     }
 
     @Override
-    String getName() {
+    public String getName() {
         return "USSR_MEDIUM";
     }
 }

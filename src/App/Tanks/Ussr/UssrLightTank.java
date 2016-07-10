@@ -1,3 +1,7 @@
+package App.Tanks.Ussr;
+
+import App.Tanks.Tank;
+
 /**
  * Created by User on 05.07.2016.
  */
@@ -14,7 +18,7 @@ public class UssrLightTank extends Tank {
     }
 
     @Override
-    String getName() {
+    public String getName() {
         return "USSR_LIGHT";
     }
 }

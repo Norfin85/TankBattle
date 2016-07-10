@@ -1,3 +1,7 @@
+package App.Tanks;
+
+import App.Tanks.Tank;
+
 /**
  * Created by User on 05.07.2016.
  */
