@@ -7,114 +7,100 @@ import App.Tanks.TankFactory;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static App.Tanks.FactoryProducer.TankType.GERMAN;
-import static App.Tanks.FactoryProducer.TankType.USSR;
-
 
 /**
  * Created by User on 06.07.2016.
  */
 public class TankBattle {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ArrayList<Tank> ussrTanks = new ArrayList<Tank>();
         ArrayList<Tank> germanTanks = new ArrayList<Tank>();
-        TankFactory ussrTankFactory = FactoryProducer.getFactory(USSR);
-        ussrTanks.add(ussrTankFactory.createUssrTank("LIGHT"));
-        ussrTanks.add(ussrTankFactory.createUssrTank("MEDIUM"));
-        ussrTanks.add(ussrTankFactory.createUssrTank("HEAVY"));
+        TankFactory ussrTankFactory = FactoryProducer.getFactory(FactoryProducer.FactoryType.USSR);
+        for (int i = 0; i < 5; i++)
+            ussrTanks.add(ussrTankFactory.createUssrTank(TankFactory.TankType.LIGHT));
+        for (int i = 0; i < 3; i++)
+            ussrTanks.add(ussrTankFactory.createUssrTank(TankFactory.TankType.MEDIUM));
+        for (int i = 0; i < 1; i++)
+            ussrTanks.add(ussrTankFactory.createUssrTank(TankFactory.TankType.HEAVY));
 
-        TankFactory germanTankFactory = FactoryProducer.getFactory(GERMAN);
-        germanTanks.add(germanTankFactory.createGermanTank("LIGHT"));
-        germanTanks.add(germanTankFactory.createGermanTank("MEDIUM"));
-        germanTanks.add(germanTankFactory.createGermanTank("HEAVY"));
-        battleTank(ussrTanks, germanTanks);
-        for (Tank tank : ussrTanks) System.out.println(tank);
-        for (Tank tank : germanTanks) System.out.println(tank);
-
+        TankFactory germanTankFactory = FactoryProducer.getFactory(FactoryProducer.FactoryType.GERMAN);
+        for (int i = 0; i < 5; i++)
+            germanTanks.add(germanTankFactory.createGermanTank(TankFactory.TankType.LIGHT));
+        for (int i = 0; i < 3; i++)
+            germanTanks.add(germanTankFactory.createGermanTank(TankFactory.TankType.MEDIUM));
+        for (int i = 0; i < 1; i++)
+            germanTanks.add(germanTankFactory.createGermanTank(TankFactory.TankType.HEAVY));
+        while (!ussrTanks.isEmpty() && !germanTanks.isEmpty())
+            battleTank(ussrTanks, germanTanks);
+        if (!ussrTanks.isEmpty())
+            for (Tank tank : ussrTanks) System.out.println(tank);
+        else
+            System.out.println("Все танки СССР уничтожены!");
+        if (!germanTanks.isEmpty())
+            for (Tank tank : germanTanks) System.out.println(tank);
+        else
+            System.out.println("Все танки Германии уничтожены!");
     }
 
-    public static void battleTank(ArrayList<Tank> ussrTanks, ArrayList<Tank> germanTanks) {
+    public static void battleTank(ArrayList<Tank> ussrTanks, ArrayList<Tank> germanTanks) throws InterruptedException {
         //получаем случайную пару танков
+        int rUssr = 0, rGerman = 0;
         Random r = new Random(System.currentTimeMillis());
-        int rUssr = r.nextInt(2);
-        int rGerman = r.nextInt(2);
+        if (ussrTanks.size() >= 2) rUssr = r.nextInt(ussrTanks.size() - 1);
+        if (germanTanks.size() >= 2) rGerman = r.nextInt(germanTanks.size() - 1);
         Tank curUssrTank = ussrTanks.get(rUssr);
         Tank curGermanTank = germanTanks.get(rGerman);
         System.out.println("Начался бой между " + curUssrTank.getName() + " и " + curGermanTank.getName());
         //определяем начальные условия: расположение танков
         //0 - лоб, 1 - бок, 2 - зад
-        int curUssrTankDislocation = r.nextInt(2);
-        int curGermanTankDislocation = r.nextInt(2);
-        // определяем запас времени танка и кто первым стреляет
-        double numTacts = curUssrTankDislocation * curUssrTank.getTimeToTurn() -
-                curGermanTankDislocation * curGermanTank.getTimeToTurn();
-        //если танк СССР быстрее развернулся то он успевает нанести бонусные выстрелы
-        if (numTacts < 0) {
-            curGermanTank.createDamage((int) (-numTacts / curUssrTank.getTimeToReload() + 1)
-                    * (curUssrTank.getDamage() - curGermanTank.getArmor()));
+        curUssrTank.setCurDislocation(r.nextInt(2));
+        curGermanTank.setCurDislocation(r.nextInt(2));
+        if (curUssrTank.getCurDislocation() == 0) curUssrTank.setActionPoints(curUssrTank.getTimeToReload());
+        if (curGermanTank.getCurDislocation() == 0) curGermanTank.setActionPoints(curGermanTank.getTimeToReload());
+        System.out.println(curUssrTank.getName() + " расположение - " + curUssrTank.getCurDislocation());
+        System.out.println(curGermanTank.getName() + " расположение - " + curGermanTank.getCurDislocation());
+        //определяем кто первый стреляет: 0 - СССР, 1 - Германия
+        int whoFirst = r.nextInt(1);
+        if (whoFirst == 0) {
             while (true) {
-                curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
-                if (curUssrTank.getHealth() < 0) {
+                curUssrTank.setActionPoints(10); //даем танку 10 очков дейстия
+                if (curUssrTank.getHealth() > 0) { //проверяем жив ли танк
+                    //System.out.println(curUssrTank.getActionPoints());
+                    curUssrTank.doAction(curGermanTank); // танк делает ход
+                } else {
+                    System.out.println(curUssrTank.getName()+" уничтожен.");
                     ussrTanks.remove(rUssr);
-                    System.out.println(curUssrTank.getName() + " - уничтожен");
                     break;
                 }
-                curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
-                if (curGermanTank.getHealth() < 0) {
+                Thread.sleep(1000); // пауза 0,1 секунда
+                curGermanTank.setActionPoints(10);
+                if (curGermanTank.getHealth() > 0) //проверяем жив ли танк
+                    curGermanTank.doAction(curUssrTank); // танк делает ход
+                else {
+                    System.out.println(curGermanTank.getName()+" уничтожен.");
                     germanTanks.remove(rGerman);
-                    System.out.println(curGermanTank.getName() + " - уничтожен");
                     break;
                 }
             }
-        }
-        //и наоборот
-        else if (numTacts > 0) {
-            curUssrTank.createDamage((int) (numTacts / curGermanTank.getTimeToReload() + 1) *
-                    (curGermanTank.getDamage() - curUssrTank.getArmor()));
+        } else {
             while (true) {
-                curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
-                if (curGermanTank.getHealth() < 0) {
+                curGermanTank.setActionPoints(10); //даем танку 10 очков дейстия
+                if (curGermanTank.getHealth() > 0) { //проверяем жив ли танк
+                    System.out.println(curGermanTank.getActionPoints());
+                    curGermanTank.doAction(curUssrTank); // танк делает ход
+                } else {
+                    System.out.println(curGermanTank.getName()+" уничтожен.");
                     germanTanks.remove(rGerman);
-                    System.out.println(curGermanTank.getName() + " - уничтожен");
                     break;
                 }
-                curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
-                if (curUssrTank.getHealth() < 0) {
+                Thread.sleep(1000); // пауза 1 секунда
+                curUssrTank.setActionPoints(10);
+                if (curUssrTank.getHealth() > 0) //проверяем жив ли танк
+                    curUssrTank.doAction(curUssrTank); // танк делает ход
+                else {
+                    System.out.println(curUssrTank.getName()+" уничтожен.");
                     ussrTanks.remove(rUssr);
-                    System.out.println(curUssrTank.getName() + " - уничтожен");
                     break;
-                }
-            }
-        } else if (numTacts == 0) {
-            if (r.nextInt(1) == 0) {
-                while (true) {
-                    curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
-                    if (curGermanTank.getHealth() < 0) {
-                        germanTanks.remove(rGerman);
-                        System.out.println(curGermanTank.getName() + " - уничтожен");
-                        break;
-                    }
-                    curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
-                    if (curUssrTank.getHealth() < 0) {
-                        ussrTanks.remove(rUssr);
-                        System.out.println(curUssrTank.getName() + " - уничтожен");
-                        break;
-                    }
-                }
-            } else {
-                while (true) {
-                    curUssrTank.createDamage(curGermanTank.getDamage() - curUssrTank.getArmor());
-                    if (curUssrTank.getHealth() < 0) {
-                        ussrTanks.remove(rUssr);
-                        System.out.println(curUssrTank.getName() + " - уничтожен");
-                        break;
-                    }
-                    curGermanTank.createDamage(curUssrTank.getDamage() - curGermanTank.getArmor());
-                    if (curGermanTank.getHealth() < 0) {
-                        germanTanks.remove(rGerman);
-                        System.out.println(curGermanTank.getName() + " - уничтожен");
-                        break;
-                    }
                 }
             }
         }

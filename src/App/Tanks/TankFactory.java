@@ -6,6 +6,7 @@ import App.Tanks.Tank;
  * Created by User on 05.07.2016.
  */
 public interface TankFactory {
-    Tank createGermanTank(String typeTank);
-    Tank createUssrTank(String typeTank);
+    enum TankType{LIGHT, MEDIUM, HEAVY}
+    Tank createGermanTank(TankType type);
+    Tank createUssrTank(TankType type);
 }

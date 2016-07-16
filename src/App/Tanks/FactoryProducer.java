@@ -9,9 +9,9 @@ import App.Tanks.Ussr.UssrTankFactory;
  */
 public class FactoryProducer {
 
-    public enum TankType {USSR, GERMAN}
-    TankType choice;
-    public static TankFactory getFactory(TankType choice) {
+    public enum FactoryType {USSR, GERMAN}
+
+    public static TankFactory getFactory(FactoryType choice) {
         switch (choice) {
             case USSR:
                 return new UssrTankFactory();

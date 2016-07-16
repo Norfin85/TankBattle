@@ -8,29 +8,29 @@ import App.Tanks.TankFactory;
  */
 public class UssrTankFactory implements TankFactory {
     @Override
-    public Tank createGermanTank(String typeTank) {
+    public Tank createGermanTank(TankType type) {
         return null;
     }
 
-    public Tank createUssrTank(String typeTank) {
+    public Tank createUssrTank(TankType type) {
         {
             Tank ussrTank = null;
-            switch (typeTank) {
-                case "LIGHT":
+            switch (type) {
+                case LIGHT:
                     ussrTank = new UssrLightTank();
                     break;
 
-                case "MEDIUM":
+                case MEDIUM:
                     ussrTank = new UssrMediumTank();
                     break;
 
-                case "HEAVY":
+                case HEAVY:
                     ussrTank = new UssrHeavyTank();
                     break;
 
                 default:
                     throw new IllegalArgumentException("Illegal type of tank: "
-                            + typeTank);
+                            + type);
                     //throw some exception
             }
             return ussrTank;
