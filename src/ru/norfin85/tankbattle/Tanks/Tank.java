@@ -1,11 +1,15 @@
-package App.Tanks;
+package ru.norfin85.tankbattle.Tanks;
+
+import static ru.norfin85.tankbattle.Graphics.printBattleAction;
+import static ru.norfin85.tankbattle.Graphics.updateBattleList;
+import static ru.norfin85.tankbattle.Tanks.Writer.battleActionWriter;
 
 /**
  * Created by User on 05.07.2016.
  */
 public abstract class Tank {
     private int health, damage, curDislocation, actionPoints,
-            timeToReload, timeToTurn, armor;
+            timeToReload, timeToTurn, armor, id;
 
     public int getHealth() {
         return health;
@@ -35,39 +39,38 @@ public abstract class Tank {
         return curDislocation;
     }
 
-    public void doAction(Tank tank) {
+    public String doAction(Tank tank, String battleLog) {
         if (curDislocation != 0) {
             if (actionPoints >= timeToTurn && curDislocation == 1) {
                 curDislocation = curDislocation - 1;
                 actionPoints = actionPoints + timeToReload - timeToTurn;
-                System.out.println(getName() + " развернулся.");
+                battleLog += battleActionWriter (this, null, "Разворот", battleLog);
             } else if (actionPoints >= timeToTurn) {
                 curDislocation = curDislocation - 1;
                 actionPoints -= timeToTurn;
-                System.out.println(getName() + " повернул на 90 градусов.");
+                battleLog += battleActionWriter (this, null, "Поворот", battleLog);
             }
         } else {
             if (actionPoints >= timeToReload) {
                 tank.createDamage(damage);
                 actionPoints -= timeToReload;
-                System.out.println(getName() + " нанес " + (damage - tank.getArmor()) +
-                        " урона. У противника осталось " + tank.getHealth() + " очков жизни.");
+                battleLog += battleActionWriter (this, tank, "Урон", battleLog);
             }
         }
+        return battleLog;
     }
 
     public int getArmor() {
         return armor;
     }
 
-    public abstract String getName();
-
-    public Tank(int health, int damage, int timeToReload, int timeToTurn, int armor) {
+    public Tank(int health, int damage, int timeToReload, int timeToTurn, int armor, int id) {
         this.health = health;
         this.damage = damage;
         this.timeToReload = timeToReload;
         this.timeToTurn = timeToTurn;
         this.armor = armor;
+        this.id = id;
         curDislocation = 0;
         actionPoints = 0;
     }
@@ -78,5 +81,13 @@ public abstract class Tank {
 
     public void setActionPoints(int actionPoints) {
         this.actionPoints += actionPoints;
+    }
+
+    public abstract void setName(String name);
+
+    public abstract String getName();
+
+    public int getId() {
+        return id;
     }
 }

@@ -1,26 +1,26 @@
-package App.Tanks.German;
+package ru.norfin85.tankbattle.Tanks.German;
 
-import App.Tanks.Tank;
-import App.Tanks.TankFactory;
+import ru.norfin85.tankbattle.Tanks.Tank;
+import ru.norfin85.tankbattle.Tanks.TankFactory;
 
 /**
  * Created by User on 05.07.2016.
  */
 public class GermanTankFactory implements TankFactory {
     @Override
-    public Tank createGermanTank(TankType type) {
+    public Tank createGermanTank(TankType type, int id) {
         Tank germanTank = null;
         switch (type) {
             case LIGHT:
-                germanTank = new GermanLightTank();
+                germanTank = new GermanLightTank(id);
                 break;
 
             case MEDIUM:
-                germanTank = new GermanMediumTank();
+                germanTank = new GermanMediumTank(id);
                 break;
 
             case HEAVY:
-                germanTank = new GermanHeavyTank();
+                germanTank = new GermanHeavyTank(id);
                 break;
 
             default:
@@ -32,7 +32,7 @@ public class GermanTankFactory implements TankFactory {
     }
 
     @Override
-    public Tank createUssrTank(TankType type) {
+    public Tank createUssrTank(TankType type, int ID) {
         return null;
     }
 }

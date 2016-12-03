@@ -1,8 +1,7 @@
-package App.Tanks;
+package ru.norfin85.tankbattle.Tanks;
 
-import App.TankBattle;
-import App.Tanks.German.GermanTankFactory;
-import App.Tanks.Ussr.UssrTankFactory;
+import ru.norfin85.tankbattle.Tanks.German.GermanTankFactory;
+import ru.norfin85.tankbattle.Tanks.Ussr.UssrTankFactory;
 
 /**
  * Created by User on 06.07.2016.
