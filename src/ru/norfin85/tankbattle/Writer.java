@@ -1,4 +1,6 @@
-package ru.norfin85.tankbattle.Tanks;
+package ru.norfin85.tankbattle;
+
+import ru.norfin85.tankbattle.Tanks.Tank;
 
 /**
  * Created by User on 02.11.2016.
@@ -17,17 +19,18 @@ public class Writer {
         return battleLog;
     }
 
-    public static String battleActionWriter(Tank firstTank, Tank secondTank, String action, String battleLog) {
+    public static String battleActionWriter(Tank firstTank, Tank secondTank, String action) {
+        String battleLog = "";
         if (action.equals("Урон")) {
-            battleLog = battleLog + firstTank.getName() + " нанес " + (firstTank.getDamage() -
+            battleLog = firstTank.getName() + " нанес " + (firstTank.getDamage() -
                     secondTank.getArmor()) + " урона. У противника осталось " + secondTank.getHealth() +
                     " очков жизни.\n";
         } else if (action.equals("Поворот") && firstTank != null) {
-            battleLog = battleLog + firstTank.getName() + " повернул на 90 градусов.\n";
+            battleLog = firstTank.getName() + " повернул на 90 градусов.\n";
         } else if (action.equals("Разворот") && firstTank != null) {
-            battleLog = battleLog + firstTank.getName() + " развернулся.\n";
+            battleLog = firstTank.getName() + " развернулся.\n";
         } else if (action.equals("Уничтожение") && firstTank != null) {
-            battleLog = battleLog + firstTank.getName() + " уничтожен.\n";
+            battleLog = firstTank.getName() + " уничтожен.\n";
         }
         return battleLog;
     }

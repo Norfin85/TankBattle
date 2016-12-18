@@ -1,8 +1,6 @@
 package ru.norfin85.tankbattle.Tanks;
 
-import static ru.norfin85.tankbattle.Graphics.printBattleAction;
-import static ru.norfin85.tankbattle.Graphics.updateBattleList;
-import static ru.norfin85.tankbattle.Tanks.Writer.battleActionWriter;
+import static ru.norfin85.tankbattle.Writer.battleActionWriter;
 
 /**
  * Created by User on 05.07.2016.
@@ -44,17 +42,17 @@ public abstract class Tank {
             if (actionPoints >= timeToTurn && curDislocation == 1) {
                 curDislocation = curDislocation - 1;
                 actionPoints = actionPoints + timeToReload - timeToTurn;
-                battleLog += battleActionWriter (this, null, "Разворот", battleLog);
+                battleLog += battleActionWriter (this, null, "Разворот");
             } else if (actionPoints >= timeToTurn) {
                 curDislocation = curDislocation - 1;
                 actionPoints -= timeToTurn;
-                battleLog += battleActionWriter (this, null, "Поворот", battleLog);
+                battleLog += battleActionWriter (this, null, "Поворот");
             }
         } else {
             if (actionPoints >= timeToReload) {
                 tank.createDamage(damage);
                 actionPoints -= timeToReload;
-                battleLog += battleActionWriter (this, tank, "Урон", battleLog);
+                battleLog += battleActionWriter (this, tank, "Урон");
             }
         }
         return battleLog;

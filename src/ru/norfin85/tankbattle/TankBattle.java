@@ -4,12 +4,11 @@ import ru.norfin85.tankbattle.Tanks.FactoryProducer;
 import ru.norfin85.tankbattle.Tanks.Tank;
 import ru.norfin85.tankbattle.Tanks.TankFactory;
 
-import javax.swing.*;
 import java.util.*;
 
 import static ru.norfin85.tankbattle.Graphics.*;
-import static ru.norfin85.tankbattle.Tanks.Writer.battleActionWriter;
-import static ru.norfin85.tankbattle.Tanks.Writer.dislocationWriter;
+import static ru.norfin85.tankbattle.Writer.battleActionWriter;
+import static ru.norfin85.tankbattle.Writer.dislocationWriter;
 
 
 /**
@@ -77,27 +76,34 @@ public class TankBattle {
     public static String battleTank() {
         //получаем случайную пару танков
         n++;
+        int rUssr, rGerman;
         battleLog.add(n, "");
         List<Integer> keysUssr = new ArrayList<>();
         keysUssr.add(0);
         List<Integer> keysGerman = new ArrayList<>();
         keysGerman.add(0);
         Random r = new Random(System.currentTimeMillis());
-        if (ussrTanks.size() >= 2) keysUssr = new ArrayList<>(ussrTanks.keySet());
-        int rUssr = keysUssr.get(r.nextInt(keysUssr.size()));
+        if (ussrTanks.size() >= 1) keysUssr = new ArrayList<>(ussrTanks.keySet());
+        if (keysUssr.size() >= 2) rUssr = keysUssr.get(r.nextInt(keysUssr.size()));
+        else {
+            rUssr = keysUssr.get(0);
+        }
         keysGerman = new ArrayList<>(germanTanks.keySet());
-        if (germanTanks.size() >= 2) keysGerman = new ArrayList<>(germanTanks.keySet());
-        int rGerman = keysGerman.get(r.nextInt(keysUssr.size()));
+        if (germanTanks.size() >= 1) keysGerman = new ArrayList<>(germanTanks.keySet());
+        if (keysGerman.size() >= 2) rGerman = keysGerman.get(r.nextInt(keysGerman.size()));
+        else {
+            rGerman = keysGerman.get(0);
+        }
         Tank curUssrTank = ussrTanks.get(rUssr);
         Tank curGermanTank = germanTanks.get(rGerman);
         int maxHealthU = 0;
         int maxHealthG = 0;
-        if (curUssrTank.getId() < 3) maxHealthU = 100;
-        else if (curUssrTank.getId() > 2 && curUssrTank.getId() < 5) maxHealthU = 200;
-        else if (curUssrTank.getId() == 5) maxHealthU = 500;
-        if (curGermanTank.getId() < 9) maxHealthG = 100;
-        else if (curUssrTank.getId() > 8 && curUssrTank.getId() < 11) maxHealthG = 200;
-        else if (curUssrTank.getId() == 11) maxHealthG = 500;
+        if (rUssr < 3) maxHealthU = 100;
+        else if (rUssr > 2 && curUssrTank.getId() < 5) maxHealthU = 200;
+        else if (rUssr == 5) maxHealthU = 500;
+        else if (rGerman < 9) maxHealthG = 100;
+        else if (rGerman > 8 && curUssrTank.getId() < 11) maxHealthG = 200;
+        else if (rGerman == 11) maxHealthG = 500;
         setHealthes(curUssrTank, curGermanTank);
         setCurrentBattle(curUssrTank, curGermanTank);
         //updateFrame();
@@ -107,7 +113,7 @@ public class TankBattle {
         curGermanTank.setCurDislocation(r.nextInt(3));
         if (curUssrTank.getCurDislocation() == 0) curUssrTank.setActionPoints(curUssrTank.getTimeToReload());
         if (curGermanTank.getCurDislocation() == 0) curGermanTank.setActionPoints(curGermanTank.getTimeToReload());
-        battleLog.set(n, dislocationWriter (curUssrTank, curGermanTank, battleLog.get(n)));
+        battleLog.set(n, dislocationWriter(curUssrTank, curGermanTank, battleLog.get(n)));
         //updateBattleList();
         //определяем кто первый стреляет: 0 - СССР, 1 - Германия
         int whoFirst = r.nextInt(2);
@@ -117,19 +123,19 @@ public class TankBattle {
                 if (curUssrTank.getHealth() > 0) { //проверяем жив ли танк
                     battleLog.set(n, curUssrTank.doAction(curGermanTank, battleLog.get(n))); // танк делает ход
                 } else {
-                    battleLog.set(n, battleActionWriter (curUssrTank, null, "Унитожение", battleLog.get(n)));
+                    battleLog.set(n, battleLog.get(n) + battleActionWriter(curUssrTank, null, "Унитожение"));
                     //updateBattleList();
-                    setTankHealth (rUssr, 0);
+                    setTankHealth(rUssr, 0);
                     ussrTanks.remove(rUssr);
                     return battleLog.get(n);
                 }
                 curGermanTank.setActionPoints(10);
                 if (curGermanTank.getHealth() > 0) //проверяем жив ли танк
-                    curGermanTank.doAction(curUssrTank, battleLog.get(n)); // танк делает ход
+                    battleLog.set(n, curGermanTank.doAction(curUssrTank, battleLog.get(n))); // танк делает ход
                 else {
-                    battleLog.set(n, battleActionWriter(curGermanTank, null, "Унитожение", battleLog.get(n)));
+                    battleLog.set(n, battleLog.get(n) + battleActionWriter(curGermanTank, null, "Унитожение"));
                     //updateBattleList();
-                    setTankHealth (rGerman, 0);
+                    setTankHealth(rGerman, 0);
                     germanTanks.remove(rGerman);
                     return battleLog.get(n);
                 }
@@ -141,7 +147,7 @@ public class TankBattle {
                     //System.out.println(curGermanTank.getActionPoints());
                     battleLog.set(n, curGermanTank.doAction(curUssrTank, battleLog.get(n))); // танк делает ход
                 } else {
-                    battleLog.set(n, battleActionWriter(curGermanTank, null, "Унитожение", battleLog.get(n)));
+                    battleLog.set(n, battleLog.get(n) + battleActionWriter(curGermanTank, null, "Унитожение"));
                     //updateBattleList();
                     setTankHealth(rGerman, 0);
                     germanTanks.remove(rGerman);
@@ -151,7 +157,7 @@ public class TankBattle {
                 if (curUssrTank.getHealth() > 0) //проверяем жив ли танк
                     battleLog.set(n, curUssrTank.doAction(curUssrTank, battleLog.get(n))); // танк делает ход
                 else {
-                    battleLog.set(n, battleActionWriter(curGermanTank, null, "Унитожение", battleLog.get(n)));
+                    battleLog.set(n, battleLog.get(n) + battleActionWriter(curGermanTank, null, "Унитожение"));
                     setTankHealth(rUssr, 0);
                     //updateBattleList();
                     ussrTanks.remove(rUssr);
@@ -159,5 +165,11 @@ public class TankBattle {
                 }
             }
         }
+    }
+
+    public static int getTanks() {
+        int n = 1;
+        if (ussrTanks.isEmpty() || germanTanks.isEmpty()) n = 0;
+        return n;
     }
 }
